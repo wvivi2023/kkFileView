@@ -88,6 +88,11 @@ public class MediaFilePreviewImpl implements FilePreview {
         return otherFilePreview.notSupportedFile(model, fileAttribute, "系统还不支持该格式文件的在线预览");
     }
 
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
     /**
      * 检查视频文件转换是否已开启，以及当前文件是否需要转换
      *

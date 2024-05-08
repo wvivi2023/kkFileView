@@ -22,4 +22,10 @@ public class EmlFilePreviewImpl implements FilePreview {
         commonPreview.filePreviewHandle(url,model,fileAttribute);
         return EML_FILE_PREVIEW_PAGE;
     }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
 }

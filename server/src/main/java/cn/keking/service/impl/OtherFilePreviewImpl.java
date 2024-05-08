@@ -19,6 +19,11 @@ public class OtherFilePreviewImpl implements FilePreview {
         return this.notSupportedFile(model, fileAttribute, "系统还不支持该格式文件的在线预览");
     }
 
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
     /**
      * 通用的预览失败，导向到不支持的文件响应页面
      *
@@ -47,6 +52,5 @@ public class OtherFilePreviewImpl implements FilePreview {
         model.addAttribute("msg", KkFileUtils.htmlEscape(errMsg));
         return NOT_SUPPORTED_FILE_PAGE;
     }
-
 
 }

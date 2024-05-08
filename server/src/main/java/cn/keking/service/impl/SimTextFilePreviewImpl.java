@@ -85,4 +85,10 @@ public class SimTextFilePreviewImpl implements FilePreview {
             return result.toString();
         }
     }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
 }

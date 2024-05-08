@@ -123,5 +123,11 @@ public class TiffFilePreviewImpl implements FilePreview {
         model.addAttribute("currentUrl", url);
         return TIFF_FILE_PREVIEW_PAGE;
     }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
 }
 

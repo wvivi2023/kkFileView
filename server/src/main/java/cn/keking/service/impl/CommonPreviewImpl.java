@@ -45,4 +45,10 @@ public class CommonPreviewImpl implements FilePreview {
         }
         return null;
     }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
 }

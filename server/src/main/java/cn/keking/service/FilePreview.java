@@ -35,4 +35,5 @@ public interface FilePreview {
     String CSV_FILE_PREVIEW_PAGE = "csv";
 
     String filePreviewHandle(String url, Model model, FileAttribute fileAttribute);
+    String fileConvert(String url, Model model, FileAttribute fileAttribute);
 }

@@ -45,6 +45,7 @@ public class OfficeFilePreviewImpl implements FilePreview {
     @Override
     public String filePreviewHandle(String url, Model model, FileAttribute fileAttribute) {
         // 预览Type，参数传了就取参数的，没传取系统默认
+        long startime = System.currentTimeMillis();
         String officePreviewType = fileAttribute.getOfficePreviewType();
         boolean userToken = fileAttribute.getUsePasswordCache();
         String baseUrl = BaseUrlFilter.getBaseUrl();
@@ -67,12 +68,16 @@ public class OfficeFilePreviewImpl implements FilePreview {
                 }
             }
         }
+        long endtime = System.currentTimeMillis();
+        System.out.println("下载前耗时：" + (endtime - startime) / 1000 + "ms");
+        startime = System.currentTimeMillis();
         if (forceUpdatedCache|| !fileHandlerService.listConvertedFiles().containsKey(cacheName) || !ConfigConstants.isCacheEnabled()) {
         // 下载远程文件到本地，如果文件在本地已存在不会重复下载
         ReturnResponse<String> response = DownloadUtils.downLoad(fileAttribute, fileName);
         if (response.isFailure()) {
             return otherFilePreview.notSupportedFile(model, fileAttribute, response.getMsg());
         }
+
             String filePath = response.getContent();
             boolean  isPwdProtectedOffice =  OfficeUtils.isPwdProtected(filePath);    // 判断是否加密文件
             if (isPwdProtectedOffice && !StringUtils.hasLength(filePassword)) {
@@ -96,6 +101,7 @@ public class OfficeFilePreviewImpl implements FilePreview {
                         // 对转换后的文件进行操作(改变编码方式)
                         fileHandlerService.doActionConvertedFile(outFilePath);
                     }
+
                     //是否保留OFFICE源文件
                     if (!fileAttribute.isCompressFile() && ConfigConstants.getDeleteSourceFile()) {
                         KkFileUtils.deleteFileByPath(filePath);
@@ -106,21 +112,33 @@ public class OfficeFilePreviewImpl implements FilePreview {
                     }
                 }
             }
-
         }
         if (!isHtmlView && baseUrl != null && (OFFICE_PREVIEW_TYPE_IMAGE.equals(officePreviewType) || OFFICE_PREVIEW_TYPE_ALL_IMAGES.equals(officePreviewType))) {
-            return getPreviewType(model, fileAttribute, officePreviewType, cacheName, outFilePath, fileHandlerService, OFFICE_PREVIEW_TYPE_IMAGE, otherFilePreview);
-        }
+//            return getPreviewType(model, fileAttribute, officePreviewType, cacheName, outFilePath, fileHandlerService, OFFICE_PREVIEW_TYPE_IMAGE, otherFilePreview);
+            String tempResult = getPreviewType(model, fileAttribute, officePreviewType, cacheName, outFilePath, fileHandlerService, OFFICE_PREVIEW_TYPE_IMAGE, otherFilePreview);
+//            endtime = System.currentTimeMillis();
+//            System.out.println("getPreviewType耗时：" + (endtime - startime) / 1000 + "ms");
+//            System.out.println("getPreviewTyped的结果是:" + tempResult);
+            return tempResult;
+       }
         model.addAttribute("pdfUrl", WebUtils.encodeFileName(cacheName));  //输出转义文件名 方便url识别
         return isHtmlView ? EXEL_FILE_PREVIEW_PAGE : PDF_FILE_PREVIEW_PAGE;
+    }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
     }
 
     static String getPreviewType(Model model, FileAttribute fileAttribute, String officePreviewType, String pdfName, String outFilePath, FileHandlerService fileHandlerService, String officePreviewTypeImage, OtherFilePreviewImpl otherFilePreview) {
         String suffix = fileAttribute.getSuffix();
         boolean isPPT = suffix.equalsIgnoreCase("ppt") || suffix.equalsIgnoreCase("pptx");
         List<String> imageUrls = null;
+//        long startime = System.currentTimeMillis();
         try {
             imageUrls =  fileHandlerService.pdf2jpg(outFilePath,outFilePath, pdfName, fileAttribute);
+            //System.out.println("fileHandlerService.pdf2jpg 结果:" +imageUrls + ",outFilePath:" + outFilePath + ",pdfName:" + pdfName );
         } catch (Exception e) {
             Throwable[] throwableArray = ExceptionUtils.getThrowables(e);
             for (Throwable throwable : throwableArray) {
@@ -131,7 +149,11 @@ public class OfficeFilePreviewImpl implements FilePreview {
                     }
                 }
             }
+//            System.out.println("getPreviewTyped catch exception:" );
         }
+//        long endtime = System.currentTimeMillis();
+//        System.out.println("officefilepreviewImpl getPreviewType耗时：" + (endtime - startime) / 1000 + "ms");
+
         if (imageUrls == null || imageUrls.size() < 1) {
             return otherFilePreview.notSupportedFile(model, fileAttribute, "office转图片异常，请联系管理员");
         }

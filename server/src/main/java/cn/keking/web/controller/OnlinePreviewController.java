@@ -84,6 +84,27 @@ public class OnlinePreviewController {
         return filePreview.filePreviewHandle(fileUrl, model, fileAttribute);  //统一在这里处理 url
     }
 
+    @GetMapping( "/onConvert")
+    public String onConvert(String url, Model model, HttpServletRequest req) {
+
+        String fileUrl;
+        try {
+            fileUrl = WebUtils.decodeUrl(url);
+        } catch (Exception ex) {
+            String errorMsg = String.format(BASE64_DECODE_ERROR_MSG, "url");
+            return otherFilePreview.notSupportedFile(model, errorMsg);
+        }
+        FileAttribute fileAttribute = fileHandlerService.getFileAttribute(fileUrl, req);  //这里不在进行URL 处理了
+        model.addAttribute("file", fileAttribute);
+        FilePreview filePreview = previewFactory.get(fileAttribute);
+        logger.info("预览文件url：{}，previewType：{}", fileUrl, fileAttribute.getType());
+        fileUrl =WebUtils.urlEncoderencode(fileUrl);
+        if (ObjectUtils.isEmpty(fileUrl)) {
+            return otherFilePreview.notSupportedFile(model, "非法路径,不允许访问");
+        }
+        return filePreview.fileConvert(fileUrl, model, fileAttribute);  //统一在这里处理 url
+    }
+
     @GetMapping( "/picturesPreview")
     public String picturesPreview(String urls, Model model, HttpServletRequest req) {
         String fileUrls;

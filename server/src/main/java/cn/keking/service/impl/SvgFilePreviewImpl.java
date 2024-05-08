@@ -24,4 +24,10 @@ public class SvgFilePreviewImpl implements FilePreview {
         commonPreview.filePreviewHandle(url,model,fileAttribute);
         return SVG_FILE_PREVIEW_PAGE;
     }
+
+    @Override
+    public String fileConvert(String url, Model model, FileAttribute fileAttribute){
+        this.filePreviewHandle(url, model, fileAttribute);
+        return "转换成功";
+    }
 }

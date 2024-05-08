@@ -210,9 +210,10 @@
     <#else>
         function deleteFile(fileName) {
             if (window.confirm('你确定要删除文件吗？')) {
-                password = prompt("请输入默认密码:123456");
+                let temppassword;
+                temppassword = prompt("请输入默认密码:123456");
                 $.ajax({
-                    url: '${baseUrl}deleteFile?fileName=' + fileName +'&password='+password,
+                    url: '${baseUrl}deleteFile?fileName=' + fileName +'&password='+temppassword,
                     success: function (data) {
                         if ("删除文件失败，密码错误！" === data.msg) {
                             alert(data.msg);
@@ -232,6 +233,17 @@
         $(".loading_container").css("height", height).show();
     }
 
+    function fileConvert(fileName){
+        // href='${baseUrl}onConvert?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'
+        $.ajax({
+            url: '${baseUrl}onConvert?url=' + encodeURIComponent(Base64.encode('${baseUrl}' +fileName)),
+            success: function (data) {
+                if ("转换成功" === data.msg) {
+                    alert(data.msg);
+                }
+            }
+        });
+    }
     function onFileSelected() {
         var file = $("#fileSelect").val();
         $("#fileName").text(file);
@@ -275,7 +287,8 @@
         }).on('pre-body.bs.table', function (e, data) {
             // 每个data添加一列用来操作
             $(data).each(function (index, item) {
-                item.action = "<a class='btn btn-success' target='_blank' href='${baseUrl}onlinePreview?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'>预览</a>" +
+                item.action = "<a class='btn btn-success' target='_blank' href='${baseUrl}onConvert?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'>转换</a>" +
+                    "<a class='btn btn-success' target='_blank' href='${baseUrl}onlinePreview?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'>预览</a>" +
                     "<a class='btn btn-danger' style='margin-left:10px;' href='javascript:void(0);' onclick='deleteFile(\"" +  encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "\")'>删除</a>";
             });
             return data;
