@@ -233,14 +233,29 @@
         $(".loading_container").css("height", height).show();
     }
 
+    function showConvertingDiv() {
+        var height = window.document.documentElement.clientHeight - 1;
+        $(".loading_container").css("height", height);
+        $(".loading_container").css("z-index", 9999).show();
+    }
+
+    function hideConvertingDiv() {
+        $(".loading_container").hide();
+    }
+
     function fileConvert(fileName){
-        // href='${baseUrl}onConvert?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'
+        showConvertingDiv();
         $.ajax({
             url: '${baseUrl}onConvert?url=' + encodeURIComponent(Base64.encode('${baseUrl}' +fileName)),
+            type: "GET",
+            dataType: "text",
             success: function (data) {
-                if ("转换成功" === data.msg) {
-                    alert(data.msg);
-                }
+                hideConvertingDiv();
+                // console.log("正确返回:" + JSON.stringify(data));
+            },
+            error: function(data) {
+                hideConvertingDiv();
+                // console.log("错误返回" + JSON.stringify(data));
             }
         });
     }
@@ -287,7 +302,8 @@
         }).on('pre-body.bs.table', function (e, data) {
             // 每个data添加一列用来操作
             $(data).each(function (index, item) {
-                item.action = "<a class='btn btn-success' target='_blank' href='${baseUrl}onConvert?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'>转换</a>" +
+                //href='${baseUrl}onConvert?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'
+                item.action = "<a class='btn btn-success' target='_blank' onclick='fileConvert(\"" + item.fileName + "\")'>转换</a>" +
                     "<a class='btn btn-success' target='_blank' href='${baseUrl}onlinePreview?url=" + encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "'>预览</a>" +
                     "<a class='btn btn-danger' style='margin-left:10px;' href='javascript:void(0);' onclick='deleteFile(\"" +  encodeURIComponent(Base64.encode('${baseUrl}' + item.fileName)) + "\")'>删除</a>";
             });

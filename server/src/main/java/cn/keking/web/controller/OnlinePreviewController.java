@@ -85,7 +85,8 @@ public class OnlinePreviewController {
     }
 
     @GetMapping( "/onConvert")
-    public String onConvert(String url, Model model, HttpServletRequest req) {
+    @ResponseBody
+    public String onConvert(String url,  Model model,  HttpServletRequest req) {
 
         String fileUrl;
         try {
@@ -97,12 +98,12 @@ public class OnlinePreviewController {
         FileAttribute fileAttribute = fileHandlerService.getFileAttribute(fileUrl, req);  //这里不在进行URL 处理了
         model.addAttribute("file", fileAttribute);
         FilePreview filePreview = previewFactory.get(fileAttribute);
-        logger.info("预览文件url：{}，previewType：{}", fileUrl, fileAttribute.getType());
+        logger.info("转换文件url：{}，previewType：{}", fileUrl, fileAttribute.getType());
         fileUrl =WebUtils.urlEncoderencode(fileUrl);
         if (ObjectUtils.isEmpty(fileUrl)) {
             return otherFilePreview.notSupportedFile(model, "非法路径,不允许访问");
         }
-        return filePreview.fileConvert(fileUrl, model, fileAttribute);  //统一在这里处理 url
+        return filePreview.fileConvert(fileUrl, model, fileAttribute);
     }
 
     @GetMapping( "/picturesPreview")
