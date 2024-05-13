@@ -187,8 +187,10 @@
     <#if deleteCaptcha >
         $("#deleteCaptchaImg").click(function() {
             $("#deleteCaptchaImg").attr("src","${baseUrl}deleteFile/captcha?timestamp=" + new Date().getTime());
+            console.log("deleteCaptcha:true" );
         });
         $("#deleteCaptchaConfirmBtn").click(function() {
+            console.log("deleteCaptchaConfirmBtn:true");
             var fileName = $("#deleteCaptchaFileName").val();
             var deleteCaptchaText = $("#deleteCaptchaText").val();
             $.get('${baseUrl}deleteFile?fileName=' + fileName +'&password=' + deleteCaptchaText, function(data){

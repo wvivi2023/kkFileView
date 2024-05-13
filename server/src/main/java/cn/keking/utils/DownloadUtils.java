@@ -37,7 +37,7 @@ public class DownloadUtils {
     private final static Logger logger = LoggerFactory.getLogger(DownloadUtils.class);
     private static final String fileDir = ConfigConstants.getFileDir();
     private static final String URL_PARAM_FTP_USERNAME = "ftp.username";
-    private static final String URL_PARAM_FTP_PASSWORD = "ftp.password";
+    private static final String URL_PARAM_FTP_PASSWORD = "ftp.hashpassword";
     private static final String URL_PARAM_FTP_CONTROL_ENCODING = "ftp.control.encoding";
     private static final RestTemplate restTemplate = new RestTemplate();
     private static  final HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();

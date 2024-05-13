@@ -59,7 +59,7 @@ public class ConfigRefreshComponent {
                 String[] prohibitArray;
                 String beian;
                 String size;
-                String password;
+                String hashPassword;
                 int pdf2JpgDpi;
                 String officeTypeWeb;
                 String cadPreviewType;
@@ -89,7 +89,7 @@ public class ConfigRefreshComponent {
                     officePreviewType = properties.getProperty("office.preview.type", ConfigConstants.DEFAULT_OFFICE_PREVIEW_TYPE);
                     officePreviewSwitchDisabled = properties.getProperty("office.preview.switch.disabled", ConfigConstants.DEFAULT_OFFICE_PREVIEW_SWITCH_DISABLED);
                     ftpUsername = properties.getProperty("ftp.username", ConfigConstants.DEFAULT_FTP_USERNAME);
-                    ftpPassword = properties.getProperty("ftp.password", ConfigConstants.DEFAULT_FTP_PASSWORD);
+                    ftpPassword = properties.getProperty("ftp.hashpassword", ConfigConstants.DEFAULT_FTP_PASSWORD);
                     ftpControlEncoding = properties.getProperty("ftp.control.encoding", ConfigConstants.DEFAULT_FTP_CONTROL_ENCODING);
                     textArray = text.split(",");
                     mediaArray = media.split(",");
@@ -108,7 +108,8 @@ public class ConfigRefreshComponent {
                     size = properties.getProperty("spring.servlet.multipart.max-file-size", ConfigConstants.DEFAULT_SIZE);
                     beian = properties.getProperty("beian", ConfigConstants.DEFAULT_BEIAN);
                     prohibit = properties.getProperty("prohibit", ConfigConstants.DEFAULT_PROHIBIT);
-                    password = properties.getProperty("delete.password", ConfigConstants.DEFAULT_PASSWORD);
+                    //password = properties.getProperty("delete.password", ConfigConstants.DEFAULT_HASH_PASSWORD/*ConfigConstants.DEFAULT_PASSWORD*/);
+                    hashPassword = properties.getProperty("delete.hashpassword", ConfigConstants.DEFAULT_HASH_PASSWORD/*ConfigConstants.DEFAULT_PASSWORD*/);
                     pdf2JpgDpi = Integer.parseInt(properties.getProperty("pdf2jpg.dpi", ConfigConstants.DEFAULT_PDF2_JPG_DPI));
                     officeTypeWeb = properties.getProperty("office.type.web", ConfigConstants.DEFAULT_OFFICE_TYPE_WEB);
                     deleteSourceFile =  Boolean.parseBoolean(properties.getProperty("delete.source.file", ConfigConstants.DEFAULT_DELETE_SOURCE_FILE));
@@ -151,7 +152,7 @@ public class ConfigRefreshComponent {
                     ConfigConstants.setBeianValue(beian);
                     ConfigConstants.setSizeValue(size);
                     ConfigConstants.setProhibitValue(prohibitArray);
-                    ConfigConstants.setPasswordValue(password);
+                    ConfigConstants.setHashpassword(hashPassword);//PasswordValue(password);
                     ConfigConstants.setPdf2JpgDpiValue(pdf2JpgDpi);
                     ConfigConstants.setOfficeTypeWebValue(officeTypeWeb);
                     ConfigConstants.setOfficePageRangeValue(officPageRange);

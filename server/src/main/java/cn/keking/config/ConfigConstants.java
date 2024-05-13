@@ -48,7 +48,8 @@ public class ConfigConstants {
     private static String beian;
     private static String[] prohibit = {};
     private static String size;
-    private static String password;
+    //private static String password;
+    private static String hashpassword;
     private static int pdf2JpgDpi;
     private static String officeTypeWeb;
     private static String cadPreviewType;
@@ -89,7 +90,8 @@ public class ConfigConstants {
     public static final String DEFAULT_BEIAN = "无";
     public static final String DEFAULT_SIZE = "500MB";
     public static final String DEFAULT_PROHIBIT = "exe,dll";
-    public static final String DEFAULT_PASSWORD = "123456";
+    public static final String DEFAULT_HASH_PASSWORD = "$2a$10$czAfgNpu45/VALx1lk1ORuitTUrwEqpsCMWVVqbRj8NJ0Y.ODduM2";
+    //public static final String DEFAULT_PASSWORD = "$2a$10$czAfgNpu45/VALx1lk1ORuitTUrwEqpsCMWVVqbRj8NJ0Y.ODduM2";
     public static final String DEFAULT_PDF2_JPG_DPI = "105";
     public static final String DEFAULT_OFFICE_TYPE_WEB = "web";
     public static final String DEFAULT_DELETE_SOURCE_FILE = "true";
@@ -110,6 +112,14 @@ public class ConfigConstants {
 
     public static Boolean isCacheEnabled() {
         return cacheEnabled;
+    }
+
+    public static String getHashpassword() {
+        return hashpassword;
+    }
+
+    public static void setHashpassword(String hashpassword) {
+        ConfigConstants.hashpassword = hashpassword;
     }
 
     @Value("${cache.enabled:true}")
@@ -207,7 +217,7 @@ public class ConfigConstants {
         return ftpPassword;
     }
 
-    @Value("${ftp.password:}")
+    @Value("${ftp.hashpassword:}")
     public void setFtpPassword(String ftpPassword) {
         setFtpPasswordValue(ftpPassword);
     }
@@ -468,17 +478,18 @@ public class ConfigConstants {
         ConfigConstants.size = size;
     }
 
-    public static String getPassword() {
-        return password;
+//    public static String getPassword() {
+//        return password;
+//    }
+
+    @Value("${delete.hashpassword:$2a$10$czAfgNpu45/VALx1lk1ORuitTUrwEqpsCMWVVqbRj8NJ0Y.ODduM2}")
+    public void setHashPassword(String password) {
+        setHashPasswordValue(password);
     }
 
-    @Value("${delete.password:123456}")
-    public void setPassword(String password) {
-        setPasswordValue(password);
-    }
-
-    public static void setPasswordValue(String password) {
-        ConfigConstants.password = password;
+    public static void setHashPasswordValue(String hashpassword) {
+        //ConfigConstants.password = password;
+        ConfigConstants.hashpassword = hashpassword;
     }
 
 

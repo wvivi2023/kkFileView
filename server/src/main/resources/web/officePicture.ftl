@@ -45,6 +45,7 @@
         /*初始化水印*/
         initWaterMark();
         checkImgs();
+        console.log("office picture ftl")
     };
     window.onscroll = throttle(checkImgs);
     function changePreviewType(previewType) {
