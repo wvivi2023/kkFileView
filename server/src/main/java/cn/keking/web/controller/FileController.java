@@ -9,7 +9,6 @@ import cn.keking.utils.RarUtils;
 import cn.keking.utils.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -196,21 +195,12 @@ public class FileController {
             return ReturnResponse.failure("密码 or 验证码为空，删除失败！");
         }
 
-        //String expectedPassword = ConfigConstants.getDeleteCaptcha() ? WebUtils.getSessionAttr(request, CAPTCHA_CODE) : ConfigConstants.getPassword();
-        if (Boolean.TRUE.equals(ConfigConstants.getDeleteCaptcha())){
-            String expectedPassword  =  WebUtils.getSessionAttr(request, CAPTCHA_CODE);
-            if (!password.equalsIgnoreCase(expectedPassword)) {
-                logger.error("删除文件【{}】失败，验证码错误！", fileName);
-                return ReturnResponse.failure("删除文件失败，验证码错误！");
-            }
-        }else {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            if (!passwordEncoder.matches(password, ConfigConstants.getHashpassword())) {
-                logger.error("删除文件【{}】失败，密码错误！", fileName);
-                return ReturnResponse.failure("删除文件失败，密码错误！");
-            }
-        }
+        String expectedPassword = ConfigConstants.getDeleteCaptcha() ? WebUtils.getSessionAttr(request, CAPTCHA_CODE) : ConfigConstants.getPassword();
 
+        if (!password.equalsIgnoreCase(expectedPassword)) {
+            logger.error("删除文件【{}】失败，密码错误！", fileName);
+            return ReturnResponse.failure("删除文件失败，密码错误！");
+        }
         return ReturnResponse.success(fileName);
     }
 

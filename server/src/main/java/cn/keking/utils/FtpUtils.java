@@ -1,13 +1,11 @@
 package cn.keking.utils;
 
 import cn.keking.config.ConfigConstants;
-import cn.keking.model.ReturnResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -40,16 +38,8 @@ public class FtpUtils {
     }
 
     public static void download(String ftpUrl, String localFilePath, String ftpUsername, String ftpPassword, String ftpControlEncoding) throws IOException {
-
         String username = StringUtils.isEmpty(ftpUsername) ? ConfigConstants.getFtpUsername() : ftpUsername;
-        ////这里有ftp密码还需要进行测试验证，weiweiw 2024.5.9
-        String configFtpPass = "";
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (passwordEncoder.matches(configFtpPass, ConfigConstants.getFtpPassword())) {
-            configFtpPass = "123456";
-        }
-
-        String password = StringUtils.isEmpty(ftpPassword) ? configFtpPass : ftpPassword;
+        String password = StringUtils.isEmpty(ftpPassword) ? ConfigConstants.getFtpPassword() : ftpPassword;
         String controlEncoding = StringUtils.isEmpty(ftpControlEncoding) ? ConfigConstants.getFtpControlEncoding() : ftpControlEncoding;
         URL url = new URL(ftpUrl);
         String host = url.getHost();
